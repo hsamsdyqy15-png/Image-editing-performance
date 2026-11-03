@@ -1,0 +1,6 @@
+{
+  "name": "Media Studio Pro",
+  "description": "All-in-one browser media editor: image studio, video & audio trimmers, filters, snapshot capture, and developer text suite.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

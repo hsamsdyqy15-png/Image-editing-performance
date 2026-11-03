@@ -1,0 +1,2256 @@
+<!-- Standalone single-file bundle ready for GitHub Pages -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Media Studio Pro | استوديو الوسائط الشامل</title>
+  
+  <meta name="title" content="Media Studio Pro | All-in-One Client Creative Suite" />
+  <meta name="description" content="محرر وسائط متكامل وشامل يعمل 100% في المتصفح دون خوادم. تعديل الصور، قص الفيديو، تعزيز الصوت، وتنسيق الأكواد." />
+  <meta name="theme-color" content="#070a12" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-base: #06090f;
+      --bg-surface: #0f172a;
+      --bg-card: rgba(19, 29, 51, 0.7);
+      --bg-card-hover: rgba(28, 41, 68, 0.85);
+      --border-line: rgba(255, 255, 255, 0.09);
+      --border-active: rgba(56, 189, 248, 0.45);
+      --cyan: #38bdf8;
+      --indigo: #6366f1;
+      --emerald: #10b981;
+      --rose: #f43f5e;
+      --amber: #f59e0b;
+      --text-1: #f8fafc;
+      --text-2: #94a3b8;
+      --text-3: #64748b;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-ar: 'Cairo', system-ui, -apple-system, sans-serif;
+      --font-en: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg-base);
+      color: var(--text-1);
+      font-family: var(--font-ar);
+    }
+
+    body[dir="ltr"] { font-family: var(--font-en); }
+
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      background: radial-gradient(circle at 10% 10%, rgba(30, 58, 138, 0.18), transparent 35%),
+                  radial-gradient(circle at 90% 90%, rgba(99, 102, 241, 0.15), transparent 35%),
+                  var(--bg-base);
+    }
+
+    .top-bar {
+      height: 52px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      flex-shrink: 0;
+      z-index: 30;
+    }
+
+    .brand-box { display: flex; align-items: center; gap: 0.6rem; min-width: 0; }
+    .brand-logo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #0284c7, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .brand-text { display: flex; flex-direction: column; min-width: 0; }
+    .brand-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+      line-height: 1.15;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .brand-desc { font-size: 0.65rem; color: var(--text-3); font-weight: 500; white-space: nowrap; }
+
+    .top-actions { display: flex; align-items: center; gap: 0.45rem; flex-shrink: 0; }
+    .icon-action-btn {
+      height: 34px;
+      padding: 0 0.65rem;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-line);
+      color: var(--text-2);
+      font-size: 0.775rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+
+    .icon-action-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .primary-save-btn {
+      height: 34px;
+      padding: 0 0.85rem;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #0284c7, #4f46e5);
+      border: none;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35);
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+
+    .primary-save-btn:hover { box-shadow: 0 4px 14px rgba(2, 132, 199, 0.5); }
+
+    .module-nav-bar {
+      height: 42px;
+      background: rgba(10, 16, 28, 0.95);
+      border-bottom: 1px solid var(--border-line);
+      display: flex;
+      padding: 3px 0.75rem;
+      gap: 6px;
+      flex-shrink: 0;
+      z-index: 25;
+    }
+
+    .module-tab-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-2);
+      font-size: 0.825rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .module-tab-btn:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
+    .module-tab-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: rgba(56, 189, 248, 0.35);
+      color: var(--cyan);
+      box-shadow: 0 1px 6px rgba(56, 189, 248, 0.15);
+    }
+
+    .workspace-body { flex: 1; display: flex; overflow: hidden; position: relative; }
+    .module-view { display: none; width: 100%; height: 100%; }
+    .module-view.active { display: flex; }
+
+    .image-stage-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background: #04060a;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .stage-sub-bar {
+      height: 38px;
+      background: rgba(15, 23, 42, 0.7);
+      border-bottom: 1px solid var(--border-line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 0.85rem;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .stage-btn-group { display: flex; align-items: center; gap: 0.35rem; }
+    .micro-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-line);
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    .micro-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+
+    .canvas-viewport-box {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: auto;
+      padding: 1.5rem;
+      background-image: 
+        linear-gradient(45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%), 
+        linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.02) 75%), 
+        linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.02) 75%);
+      background-size: 20px 20px;
+    }
+
+    #image-canvas {
+      max-width: 100%;
+      max-height: 100%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      object-fit: contain;
+      transition: transform 0.1s ease-out;
+    }
+
+    #cropper-container {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      z-index: 40;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 1rem;
+    }
+
+    #cropper-container.active { display: flex; }
+
+    .empty-drop-card {
+      border: 2px dashed rgba(255, 255, 255, 0.18);
+      border-radius: var(--radius-lg);
+      padding: 2rem 1.5rem;
+      max-width: 420px;
+      background: rgba(15, 23, 42, 0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.85rem;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .empty-drop-card:hover { border-color: var(--cyan); background: rgba(56, 189, 248, 0.05); }
+
+    .tools-panel-shell {
+      width: 360px;
+      background: rgba(13, 19, 33, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-inline-start: 1px solid var(--border-line);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      flex-shrink: 0;
+      z-index: 20;
+    }
+
+    .tool-category-chips {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.65rem 0.85rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid var(--border-line);
+      overflow-x: auto;
+      flex-shrink: 0;
+      scrollbar-width: none;
+    }
+    .tool-category-chips::-webkit-scrollbar { display: none; }
+
+    .category-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-line);
+      color: var(--text-2);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+
+    .category-chip:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+    .category-chip.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .tools-scroll-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .tool-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-line);
+      border-radius: var(--radius-md);
+      padding: 0.95rem;
+    }
+
+    .tool-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.85rem;
+      font-size: 0.825rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .slider-item { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.75rem; }
+    .slider-item:last-child { margin-bottom: 0; }
+    .slider-header-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-2); }
+    .slider-numeric-val { font-family: var(--font-mono); font-size: 0.725rem; color: var(--cyan); font-weight: 600; }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 6px var(--cyan);
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+    .btn-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; }
+    .btn-row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
+    .btn-row-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.35rem; }
+
+    .btn-action-tool {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-line);
+      color: var(--text-2);
+      border-radius: var(--radius-sm);
+      padding: 0.5rem 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: inherit;
+      min-height: 38px;
+    }
+
+    .btn-action-tool:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-action-tool.active {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .preset-filter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.45rem; }
+    .preset-chip {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-line);
+      border-radius: var(--radius-sm);
+      padding: 0.5rem 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      color: var(--text-2);
+      transition: all 0.15s ease;
+    }
+
+    .preset-chip:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+    .preset-chip.active {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .form-input-box, .form-select-box {
+      width: 100%;
+      height: 38px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-line);
+      border-radius: var(--radius-sm);
+      color: #fff;
+      font-size: 0.8rem;
+      padding: 0 0.75rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .form-input-box:focus, .form-select-box:focus { border-color: var(--cyan); }
+
+    .video-view-shell {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #04060a;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .video-screen-stage {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #main-video {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: var(--radius-md);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.85);
+      background: #000;
+    }
+
+    .video-scrub-bar {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-line);
+      padding: 0.75rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      flex-shrink: 0;
+    }
+
+    .scrub-track {
+      position: relative;
+      height: 32px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-line);
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      cursor: pointer;
+    }
+
+    .scrub-trim-highlight {
+      position: absolute;
+      top: 0; bottom: 0;
+      background: rgba(99, 102, 241, 0.25);
+      border-inline-start: 3px solid var(--indigo);
+      border-inline-end: 3px solid var(--indigo);
+      pointer-events: none;
+    }
+
+    .scrub-cur-head {
+      position: absolute;
+      inset-inline-start: 0;
+      height: 100%;
+      background: rgba(56, 189, 248, 0.3);
+      border-inline-end: 2px solid var(--cyan);
+      pointer-events: none;
+      width: 0%;
+    }
+
+    .playback-row { display: flex; align-items: center; justify-content: space-between; }
+    .round-play-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--cyan);
+      color: #04060a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+    }
+
+    .text-suite-shell { flex: 1; display: flex; flex-direction: column; background: var(--bg-base); overflow: hidden; }
+    .text-action-strip {
+      background: rgba(15, 23, 42, 0.8);
+      border-bottom: 1px solid var(--border-line);
+      padding: 0.5rem 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      overflow-x: auto;
+      flex-shrink: 0;
+      scrollbar-width: none;
+    }
+    .text-action-strip::-webkit-scrollbar { display: none; }
+
+    .split-text-panes { flex: 1; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+    .text-pane-box {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      border-inline-end: 1px solid var(--border-line);
+    }
+    .text-pane-box:last-child { border-inline-end: none; background: rgba(8, 12, 22, 0.7); }
+
+    .pane-bar-top {
+      height: 34px;
+      background: rgba(0, 0, 0, 0.35);
+      border-bottom: 1px solid var(--border-line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 0.85rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-2);
+      flex-shrink: 0;
+    }
+
+    .raw-text-editor {
+      flex: 1;
+      width: 100%;
+      background: transparent;
+      color: #e2e8f0;
+      border: none;
+      outline: none;
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      resize: none;
+    }
+
+    .md-render-view {
+      flex: 1;
+      padding: 1rem 1.25rem;
+      overflow-y: auto;
+      color: #cbd5e1;
+      font-size: 0.875rem;
+      line-height: 1.7;
+    }
+    .md-render-view h1, .md-render-view h2, .md-render-view h3 { color: #fff; margin-top: 1rem; margin-bottom: 0.5rem; }
+    .md-render-view h1 { font-size: 1.4rem; border-bottom: 1px solid var(--border-line); padding-bottom: 0.3rem; }
+    .md-render-view code {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.15rem 0.35rem;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      color: var(--cyan);
+    }
+    .md-render-view pre {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-line);
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      overflow-x: auto;
+      margin-bottom: 0.85rem;
+    }
+    .md-render-view table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+    .md-render-view th, .md-render-view td { border: 1px solid var(--border-line); padding: 0.5rem; text-align: start; }
+
+    .app-status-footer {
+      height: 28px;
+      background: rgba(15, 23, 42, 0.95);
+      border-top: 1px solid var(--border-line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      font-size: 0.7rem;
+      color: var(--text-3);
+      user-select: none;
+      flex-shrink: 0;
+      z-index: 30;
+    }
+
+    .footer-stat-unit {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .modal-veil {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-veil.active { display: flex; }
+
+    .modal-box-card {
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid var(--border-line);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 620px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+      overflow: hidden;
+    }
+
+    .modal-bar-head {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border-line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-scroll-area { padding: 1.25rem; overflow-y: auto; font-size: 0.85rem; line-height: 1.6; color: var(--text-2); }
+    .step-item-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-line);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .step-num-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0284c7, #6366f1);
+      color: #fff;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.75rem;
+    }
+
+    .toast-tray {
+      position: fixed;
+      bottom: 40px;
+      inset-inline-end: 20px;
+      z-index: 120;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      pointer-events: none;
+    }
+
+    .toast-bubble {
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      color: #fff;
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      animation: popUp 0.2s ease-out forwards;
+    }
+
+    @keyframes popUp {
+      from { transform: translateY(12px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 900px) {
+      .module-view { flex-direction: column; }
+      .image-stage-wrap, .video-view-shell { height: 48vh; flex: none; }
+      .tools-panel-shell { width: 100%; height: 52vh; border-inline-start: none; border-top: 1px solid var(--border-line); }
+      .split-text-panes { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+      .app-status-footer .hide-mobile { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <header class="top-bar">
+      <div class="brand-box">
+        <div class="brand-logo-icon">
+          <i class="fa-solid fa-shapes"></i>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Media Studio Pro</span>
+          <span class="brand-desc" id="lbl-brand-desc">استوديو الوسائط الشامل</span>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="icon-action-btn" onclick="toggleAppLanguage()" id="btn-lang-switch" title="تبديل اللغة">
+          <i class="fa-solid fa-globe"></i>
+          <span>EN</span>
+        </button>
+
+        <button class="icon-action-btn" onclick="openGitHubModal()" title="نشر على GitHub">
+          <i class="fa-brands fa-github"></i>
+          <span id="lbl-btn-github-top">GitHub</span>
+        </button>
+
+        <button class="primary-save-btn" onclick="onQuickExportTrigger()">
+          <i class="fa-solid fa-download"></i>
+          <span id="lbl-btn-export-top">حفظ</span>
+        </button>
+      </div>
+    </header>
+
+    <nav class="module-nav-bar">
+      <button class="module-tab-btn active" id="tab-image" onclick="changeActiveModule('image')">
+        <i class="fa-solid fa-image"></i>
+        <span id="lbl-tab-img">استوديو الصور</span>
+      </button>
+      <button class="module-tab-btn" id="tab-video" onclick="changeActiveModule('video')">
+        <i class="fa-solid fa-film"></i>
+        <span id="lbl-tab-vid">مختبر الفيديو والصوت</span>
+      </button>
+      <button class="module-tab-btn" id="tab-text" onclick="changeActiveModule('text')">
+        <i class="fa-solid fa-code"></i>
+        <span id="lbl-tab-txt">الأكواد والنصوص</span>
+      </button>
+    </nav>
+
+    <main class="workspace-body">
+
+      <!-- MODULE 1: IMAGE STUDIO -->
+      <section class="module-view active" id="view-image">
+        
+        <div class="image-stage-wrap">
+          <div class="stage-sub-bar">
+            <div class="stage-btn-group">
+              <button class="micro-btn" onclick="scaleZoom(1.2)" title="تكبير Zoom In"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+              <button class="micro-btn" onclick="scaleZoom(0.8)" title="تصغير Zoom Out"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+              <button class="micro-btn" onclick="fitZoomStage()" title="ملاءمة الشاشة Fit"><i class="fa-solid fa-expand"></i></button>
+              <span style="font-size: 0.72rem; color: var(--text-3); font-family: var(--font-mono); margin-inline-start: 0.35rem;" id="lbl-zoom-val">100%</span>
+            </div>
+            <div class="stage-btn-group">
+              <span style="font-size: 0.725rem; color: var(--text-3);" id="lbl-canvas-dimensions">1200 × 800 px</span>
+            </div>
+          </div>
+
+          <div class="canvas-viewport-box" id="viewport-stage">
+            <canvas id="image-canvas"></canvas>
+
+            <div id="cropper-container">
+              <img id="cropper-target" alt="Crop Image" style="max-width: 85%; max-height: 65vh;" />
+              <div style="display: flex; gap: 0.65rem; margin-top: 1rem;">
+                <button class="primary-save-btn" onclick="saveCropperResult()"><i class="fa-solid fa-check"></i> تطبيق القص</button>
+                <button class="btn-action-tool" style="background: rgba(244,63,94,0.25); border-color: rgba(244,63,94,0.4);" onclick="cancelCropperModal()"><i class="fa-solid fa-xmark"></i> إلغاء</button>
+              </div>
+            </div>
+
+            <div class="empty-drop-card" id="drop-zone-overlay" onclick="document.getElementById('img-file-selector').click()">
+              <div style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, rgba(56,189,248,0.2), rgba(99,102,241,0.2)); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--cyan);">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <div>
+                <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.25rem;" id="lbl-drop-head">اسحب صورتك هنا أو انقر للرفع</h4>
+                <p style="font-size: 0.75rem; color: var(--text-2);" id="lbl-drop-detail">يدعم PNG, JPG, WEBP, AVIF مباشرة في المتصفح</p>
+              </div>
+              <button class="primary-save-btn" onclick="event.stopPropagation(); loadHighResSample()">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> <span id="lbl-btn-load-demo">تحميل صورة تجريبية</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="tools-panel-shell">
+          <div class="tool-category-chips">
+            <button class="category-chip active" id="chip-color" onclick="setToolCategory('color')">
+              <i class="fa-solid fa-sliders"></i>
+              <span id="lbl-chip-color">الألوان</span>
+            </button>
+            <button class="category-chip" id="chip-presets" onclick="setToolCategory('presets')">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span id="lbl-chip-presets">فلاتر</span>
+            </button>
+            <button class="category-chip" id="chip-crop" onclick="setToolCategory('crop')">
+              <i class="fa-solid fa-crop-simple"></i>
+              <span id="lbl-chip-crop">القص والتدوير</span>
+            </button>
+            <button class="category-chip" id="chip-resize" onclick="setToolCategory('resize')">
+              <i class="fa-solid fa-expand"></i>
+              <span id="lbl-chip-resize">الأبعاد</span>
+            </button>
+            <button class="category-chip" id="chip-watermark" onclick="setToolCategory('watermark')">
+              <i class="fa-solid fa-font"></i>
+              <span id="lbl-chip-wm">النصوص</span>
+            </button>
+            <button class="category-chip" id="chip-export" onclick="setToolCategory('export')">
+              <i class="fa-solid fa-floppy-disk"></i>
+              <span id="lbl-chip-exp">تصدير</span>
+            </button>
+          </div>
+
+          <div class="tools-scroll-body">
+            
+            <div class="tool-card">
+              <div class="tool-card-head">
+                <span><i class="fa-solid fa-file-image" style="color: var(--cyan);"></i> <span id="lbl-sec-file">الصورة الحالية</span></span>
+                <button class="btn-action-tool" style="padding: 0.25rem 0.5rem; min-height: 28px;" onclick="resetImageAllFilters()">
+                  <i class="fa-solid fa-rotate-left"></i> <span id="lbl-btn-reset-filters">إعادة ضبط</span>
+                </button>
+              </div>
+              <input type="file" id="img-file-selector" accept="image/*" style="display: none;" onchange="onUserImageUploaded(event)" />
+              <div class="btn-row-2">
+                <button class="btn-action-tool" onclick="document.getElementById('img-file-selector').click()">
+                  <i class="fa-solid fa-upload"></i> <span id="lbl-btn-choose-img">رفع صورة</span>
+                </button>
+                <button class="btn-action-tool" onclick="loadHighResSample()">
+                  <i class="fa-solid fa-sparkles"></i> <span id="lbl-btn-demo-img">صورة تجريبية</span>
+                </button>
+              </div>
+            </div>
+
+            <div id="tool-subview-color">
+              <div class="tool-card">
+                <div class="slider-item">
+                  <div class="slider-header-row"><span id="lbl-adj-b">السطوع (Brightness)</span><span class="slider-numeric-val" id="num-b">100%</span></div>
+                  <input type="range" id="sl-b" min="0" max="200" value="100" oninput="redrawCanvasWithFilters()" />
+                </div>
+                <div class="slider-item">
+                  <div class="slider-header-row"><span id="lbl-adj-c">التباين (Contrast)</span><span class="slider-numeric-val" id="num-c">100%</span></div>
+                  <input type="range" id="sl-c" min="0" max="200" value="100" oninput="redrawCanvasWithFilters()" />
+                </div>
+                <div class="slider-item">
+                  <div class="slider-header-row"><span id="lbl-adj-s">التشبع (Saturation)</span><span class="slider-numeric-val" id="num-s">100%</span></div>
+                  <input type="range" id="sl-s" min="0" max="200" value="100" oninput="redrawCanvasWithFilters()" />
+                </div>
+                <div class="slider-item">
+                  <div class="slider-header-row"><span id="lbl-adj-h">درجة اللون (Hue)</span><span class="slider-numeric-val" id="num-h">0°</span></div>
+                  <input type="range" id="sl-h" min="0" max="360" value="0" oninput="redrawCanvasWithFilters()" />
+                </div>
+                <div class="slider-item">
+                  <div class="slider-header-row"><span id="lbl-adj-bl">الضبابية (Blur)</span><span class="slider-numeric-val" id="num-bl">0px</span></div>
+                  <input type="range" id="sl-bl" min="0" max="20" value="0" step="0.5" oninput="redrawCanvasWithFilters()" />
+                </div>
+                <div class="slider-item">
+                  <div class="slider-header-row"><span id="lbl-adj-sep">البني الكلاسيكي (Sepia)</span><span class="slider-numeric-val" id="num-sep">0%</span></div>
+                  <input type="range" id="sl-sep" min="0" max="100" value="0" oninput="redrawCanvasWithFilters()" />
+                </div>
+                <div class="slider-item">
+                  <div class="slider-header-row"><span id="lbl-adj-gr">أبيض وأسود (Grayscale)</span><span class="slider-numeric-val" id="num-gr">0%</span></div>
+                  <input type="range" id="sl-gr" min="0" max="100" value="0" oninput="redrawCanvasWithFilters()" />
+                </div>
+                <div class="slider-item">
+                  <div class="slider-header-row"><span id="lbl-adj-inv">عكس الألوان (Invert)</span><span class="slider-numeric-val" id="num-inv">0%</span></div>
+                  <input type="range" id="sl-inv" min="0" max="100" value="0" oninput="redrawCanvasWithFilters()" />
+                </div>
+              </div>
+            </div>
+
+            <div id="tool-subview-presets" style="display: none;">
+              <div class="tool-card">
+                <div class="preset-filter-grid">
+                  <div class="preset-chip active" onclick="triggerFilterPreset('normal', this)">طبيعي</div>
+                  <div class="preset-chip" onclick="triggerFilterPreset('vintage', this)">كلاسيكي</div>
+                  <div class="preset-chip" onclick="triggerFilterPreset('cyberpunk', this)">سايبر بانك</div>
+                  <div class="preset-chip" onclick="triggerFilterPreset('filmnoir', this)">سينمائي</div>
+                  <div class="preset-chip" onclick="triggerFilterPreset('glacier', this)">جليدي بارد</div>
+                  <div class="preset-chip" onclick="triggerFilterPreset('warmgold', this)">ذهبي دافئ</div>
+                </div>
+              </div>
+            </div>
+
+            <div id="tool-subview-crop" style="display: none;">
+              <div class="tool-card">
+                <div class="btn-row-4" style="margin-bottom: 0.75rem;">
+                  <button class="btn-action-tool" onclick="spinImage(-90)"><i class="fa-solid fa-rotate-left"></i> -90°</button>
+                  <button class="btn-action-tool" onclick="spinImage(90)"><i class="fa-solid fa-rotate-right"></i> +90°</button>
+                  <button class="btn-action-tool" onclick="mirrorImage('h')"><i class="fa-solid fa-arrows-left-right"></i> أفقي</button>
+                  <button class="btn-action-tool" onclick="mirrorImage('v')"><i class="fa-solid fa-arrows-up-down"></i> عمودي</button>
+                </div>
+                <div style="font-size: 0.72rem; color: var(--text-3); margin-bottom: 0.4rem;" id="lbl-crop-presets-title">قص بنسب محددة:</div>
+                <div class="btn-row-3">
+                  <button class="btn-action-tool" onclick="launchCropperTool(NaN)">حر (Free)</button>
+                  <button class="btn-action-tool" onclick="launchCropperTool(1)">1:1 مربع</button>
+                  <button class="btn-action-tool" onclick="launchCropperTool(16/9)">16:9 عريض</button>
+                  <button class="btn-action-tool" onclick="launchCropperTool(4/3)">4:3 شاشة</button>
+                  <button class="btn-action-tool" onclick="launchCropperTool(9/16)">9:16 ريلز</button>
+                  <button class="btn-action-tool" style="color: var(--rose);" onclick="cancelCropperModal()">إلغاء</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="tool-subview-resize" style="display: none;">
+              <div class="tool-card">
+                <div style="display: flex; gap: 0.45rem; align-items: center; margin-bottom: 0.75rem;">
+                  <input type="number" id="inp-w" class="form-input-box" placeholder="العرض" onchange="onTypeW()" />
+                  <button class="btn-action-tool active" id="btn-lock" onclick="toggleAspect()" style="height: 38px; width: 42px; flex: none;">
+                    <i class="fa-solid fa-link" id="icon-lock"></i>
+                  </button>
+                  <input type="number" id="inp-h" class="form-input-box" placeholder="الارتفاع" onchange="onTypeH()" />
+                </div>
+                <button class="primary-save-btn" style="width: 100%; justify-content: center;" onclick="applyCustomDimensions()">
+                  <i class="fa-solid fa-check"></i> <span id="lbl-btn-apply-dim">تطبيق الأبعاد</span>
+                </button>
+              </div>
+            </div>
+
+            <div id="tool-subview-watermark" style="display: none;">
+              <div class="tool-card">
+                <input type="text" id="inp-wm" class="form-input-box" value="© Media Studio Pro" placeholder="اكتب النص..." oninput="redrawCanvasWithFilters()" style="margin-bottom: 0.65rem;" />
+                <div class="btn-row-2" style="margin-bottom: 0.65rem;">
+                  <select id="sel-font" class="form-select-box" onchange="redrawCanvasWithFilters()">
+                    <option value="Cairo">خط Cairo</option>
+                    <option value="sans-serif">Modern Sans</option>
+                    <option value="Impact">Impact Bold</option>
+                    <option value="serif">Classic Serif</option>
+                    <option value="monospace">Tech Mono</option>
+                  </select>
+                  <input type="color" id="inp-wm-c" value="#ffffff" class="form-input-box" style="padding: 2px; height: 38px;" onchange="redrawCanvasWithFilters()" />
+                </div>
+                <div class="slider-item">
+                  <div class="slider-header-row"><span>حجم الخط</span><span class="slider-numeric-val" id="num-wm-s">36px</span></div>
+                  <input type="range" id="sl-wm-s" min="14" max="140" value="36" oninput="redrawCanvasWithFilters()" />
+                </div>
+                <div class="slider-item">
+                  <div class="slider-header-row"><span>الشفافية</span><span class="slider-numeric-val" id="num-wm-op">85%</span></div>
+                  <input type="range" id="sl-wm-op" min="0" max="100" value="85" oninput="redrawCanvasWithFilters()" />
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                  <label style="font-size: 0.775rem; color: var(--text-2); display: flex; align-items: center; gap: 0.35rem;">
+                    <input type="checkbox" id="chk-wm" checked onchange="redrawCanvasWithFilters()" /> تفعيل النص
+                  </label>
+                  <select id="sel-wm-align" class="form-select-box" style="width: 120px;" onchange="redrawCanvasWithFilters()">
+                    <option value="bottom-right">أسفل اليمين</option>
+                    <option value="bottom-left">أسفل اليسار</option>
+                    <option value="top-right">أعلى اليمين</option>
+                    <option value="top-left">أعلى اليسار</option>
+                    <option value="center">الوسط</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div id="tool-subview-export" style="display: none;">
+              <div class="tool-card">
+                <select id="sel-fmt" class="form-select-box" style="margin-bottom: 0.65rem;">
+                  <option value="image/png">PNG (دقة أصلية كاملة)</option>
+                  <option value="image/jpeg">JPEG (حجم مضغوط خفيف)</option>
+                  <option value="image/webp">WEBP (حديث وسريع للويب)</option>
+                </select>
+                <div class="slider-item" style="margin-bottom: 0.85rem;">
+                  <div class="slider-header-row"><span>جودة الضغط</span><span class="slider-numeric-val" id="num-qual">92%</span></div>
+                  <input type="range" id="sl-qual" min="10" max="100" value="92" oninput="document.getElementById('num-qual').innerText = this.value + '%'" />
+                </div>
+                <div class="btn-row-2">
+                  <button class="primary-save-btn" style="justify-content: center;" onclick="exportImageFile()">
+                    <i class="fa-solid fa-download"></i> <span id="lbl-btn-save-device">تنزيل</span>
+                  </button>
+                  <button class="btn-action-tool" onclick="copyImageToClip()">
+                    <i class="fa-solid fa-copy"></i> <span id="lbl-btn-copy-clip">نسخ</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </aside>
+
+      </section>
+
+      <!-- MODULE 2: VIDEO LAB -->
+      <section class="module-view" id="view-video">
+        <div class="video-view-shell">
+          <div class="video-screen-stage">
+            <video id="main-video" playsinline preload="auto" ontimeupdate="onVideoPlayTick()" onloadedmetadata="onVideoMetaReady()"></video>
+            
+            <div class="empty-drop-card" id="video-empty-notice" onclick="document.getElementById('vid-file-selector').click()">
+              <div style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, rgba(56,189,248,0.2), rgba(99,102,241,0.2)); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--cyan);">
+                <i class="fa-solid fa-file-video"></i>
+              </div>
+              <div>
+                <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.25rem;">اختر فيديو للتعديل أو المعاينة</h4>
+                <p style="font-size: 0.75rem; color: var(--text-2);">يدعم MP4, WebM, MOV بدون رفع لسيرفرات</p>
+              </div>
+              <button class="primary-save-btn" onclick="event.stopPropagation(); loadSampleVideoDemo()">
+                <i class="fa-solid fa-film"></i> توليد فيديو تجريبي
+              </button>
+            </div>
+          </div>
+
+          <div class="video-scrub-bar">
+            <div class="scrub-track" id="video-scrub-track" onclick="onTimelineClick(event)">
+              <div class="scrub-trim-highlight" id="ui-trim-box"></div>
+              <div class="scrub-cur-head" id="ui-play-head"></div>
+            </div>
+
+            <div class="playback-row">
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <button class="round-play-btn" id="btn-play-toggle" onclick="toggleVideoPlay()">
+                  <i class="fa-solid fa-play" id="icon-play-toggle"></i>
+                </button>
+                <button class="micro-btn" onclick="stepVideoOffset(-1)"><i class="fa-solid fa-backward-step"></i></button>
+                <button class="micro-btn" onclick="stepVideoOffset(1)"><i class="fa-solid fa-forward-step"></i></button>
+                <span style="font-family: var(--font-mono); font-size: 0.775rem; color: var(--text-2);" id="lbl-vid-time">00:00 / 00:00</span>
+              </div>
+
+              <div style="display: flex; gap: 0.45rem; align-items: center;">
+                <button class="btn-action-tool" onclick="captureFrameSnapshot()">
+                  <i class="fa-solid fa-camera"></i> لقطة HD
+                </button>
+                <button class="micro-btn" id="btn-mute" onclick="toggleAudioMute()">
+                  <i class="fa-solid fa-volume-high" id="icon-mute"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="tools-panel-shell">
+          <div class="tools-scroll-body">
+            
+            <div class="tool-card">
+              <div class="tool-card-head"><span><i class="fa-solid fa-video" style="color: var(--cyan);"></i> مصدر الفيديو</span></div>
+              <input type="file" id="vid-file-selector" accept="video/*" style="display: none;" onchange="onUserVideoUploaded(event)" />
+              <div class="btn-row-2">
+                <button class="btn-action-tool" onclick="document.getElementById('vid-file-selector').click()">
+                  <i class="fa-solid fa-upload"></i> رفع فيديو
+                </button>
+                <button class="btn-action-tool" onclick="loadSampleVideoDemo()">
+                  <i class="fa-solid fa-film"></i> تجريبي
+                </button>
+              </div>
+            </div>
+
+            <div class="tool-card">
+              <div class="tool-card-head"><span><i class="fa-solid fa-scissors" style="color: var(--cyan);"></i> قص الفيديو</span></div>
+              <div class="slider-item">
+                <div class="slider-header-row"><span>نقطة البداية (In):</span><span class="slider-numeric-val" id="num-trim-s">00:00.0</span></div>
+                <div style="display: flex; gap: 0.4rem; align-items: center;">
+                  <input type="range" id="sl-vid-s" min="0" max="100" value="0" step="0.1" oninput="onTrimStartSl(this.value)" />
+                  <button class="btn-action-tool" style="padding: 0.2rem 0.45rem; min-height: 28px;" onclick="setTrimStartCurrent()"><i class="fa-solid fa-anchor"></i> هنا</button>
+                </div>
+              </div>
+
+              <div class="slider-item">
+                <div class="slider-header-row"><span>نقطة النهاية (Out):</span><span class="slider-numeric-val" id="num-trim-e">00:00.0</span></div>
+                <div style="display: flex; gap: 0.4rem; align-items: center;">
+                  <input type="range" id="sl-vid-e" min="0" max="100" value="100" step="0.1" oninput="onTrimEndSl(this.value)" />
+                  <button class="btn-action-tool" style="padding: 0.2rem 0.45rem; min-height: 28px;" onclick="setTrimEndCurrent()"><i class="fa-solid fa-flag-checkered"></i> هنا</button>
+                </div>
+              </div>
+
+              <button class="primary-save-btn" style="width: 100%; justify-content: center; margin-top: 0.5rem;" onclick="renderAndDownloadTrimmedClip()">
+                <i class="fa-solid fa-scissors"></i> تسجيل وتصدير المقطع
+              </button>
+            </div>
+
+            <div class="tool-card">
+              <div class="tool-card-head"><span><i class="fa-solid fa-sliders" style="color: var(--cyan);"></i> فلاتر الفيديو المباشرة</span></div>
+              <div class="slider-item">
+                <div class="slider-header-row"><span>السطوع</span><span class="slider-numeric-val" id="num-vf-b">100%</span></div>
+                <input type="range" id="sl-vf-b" min="0" max="200" value="100" oninput="applyVideoFiltersRealtime()" />
+              </div>
+              <div class="slider-item">
+                <div class="slider-header-row"><span>التباين</span><span class="slider-numeric-val" id="num-vf-c">100%</span></div>
+                <input type="range" id="sl-vf-c" min="0" max="200" value="100" oninput="applyVideoFiltersRealtime()" />
+              </div>
+              <div class="slider-item">
+                <div class="slider-header-row"><span>التشبع</span><span class="slider-numeric-val" id="num-vf-s">100%</span></div>
+                <input type="range" id="sl-vf-s" min="0" max="200" value="100" oninput="applyVideoFiltersRealtime()" />
+              </div>
+            </div>
+
+            <div class="tool-card">
+              <div class="tool-card-head"><span><i class="fa-solid fa-volume-high" style="color: var(--cyan);"></i> تضخيم الصوت وسرعة التشغيل</span></div>
+              <div class="slider-item" style="margin-bottom: 0.65rem;">
+                <div class="slider-header-row"><span>مضخم الصوت (حتى 300%)</span><span class="slider-numeric-val" id="num-vol">100%</span></div>
+                <input type="range" id="sl-vol" min="0" max="300" value="100" oninput="setGainBooster(this.value)" />
+              </div>
+              <div class="btn-row-4">
+                <button class="btn-action-tool" onclick="setSpeed(0.5, this)">0.5x</button>
+                <button class="btn-action-tool active" onclick="setSpeed(1.0, this)">1.0x</button>
+                <button class="btn-action-tool" onclick="setSpeed(1.5, this)">1.5x</button>
+                <button class="btn-action-tool" onclick="setSpeed(2.0, this)">2.0x</button>
+              </div>
+            </div>
+
+          </div>
+        </aside>
+      </section>
+
+      <!-- MODULE 3: TEXT SUITE -->
+      <section class="module-view" id="view-text">
+        <div class="text-suite-shell">
+          <div class="text-action-strip">
+            <div style="display: flex; gap: 0.35rem; align-items: center; flex-shrink: 0;">
+              <button class="btn-action-tool" onclick="transformCase('upper')">UPPER</button>
+              <button class="btn-action-tool" onclick="transformCase('lower')">lower</button>
+              <button class="btn-action-tool" onclick="transformCase('title')">Title</button>
+              <button class="btn-action-tool" onclick="transformCase('camel')">camelCase</button>
+              <button class="btn-action-tool" onclick="transformCase('snake')">snake_case</button>
+            </div>
+
+            <div style="display: flex; gap: 0.35rem; align-items: center; flex-shrink: 0;">
+              <button class="btn-action-tool" onclick="formatJsonEditor()"><i class="fa-solid fa-code"></i> JSON Pretty</button>
+              <button class="btn-action-tool" onclick="minifyJsonEditor()">JSON Minify</button>
+              <button class="btn-action-tool" onclick="convertBase64(true)">Base64 Enc</button>
+              <button class="btn-action-tool" onclick="convertBase64(false)">Base64 Dec</button>
+              <button class="btn-action-tool" onclick="trimSpaces()">تنظيف المسافات</button>
+            </div>
+
+            <div style="display: flex; gap: 0.35rem; align-items: center; flex-shrink: 0;">
+              <button class="btn-action-tool" onclick="loadSampleMd()"><i class="fa-solid fa-file-lines"></i> تجريبي</button>
+              <button class="btn-action-tool" onclick="copyEditorText()"><i class="fa-solid fa-copy"></i> نسخ</button>
+              <button class="primary-save-btn" onclick="saveTextFile()"><i class="fa-solid fa-download"></i> حفظ</button>
+            </div>
+          </div>
+
+          <div class="split-text-panes">
+            <div class="text-pane-box">
+              <div class="pane-bar-top">
+                <span><i class="fa-solid fa-pen-to-square"></i> محرر الإدخال</span>
+                <span id="lbl-text-stats" style="font-family: var(--font-mono); font-size: 0.7rem;">0 كلمة · 0 حرف</span>
+              </div>
+              <textarea id="raw-text-area" class="raw-text-editor" placeholder="اكتب أو الصق نصوصك أو أكوادك هنا..." oninput="onTextEditorType()"></textarea>
+            </div>
+
+            <div class="text-pane-box">
+              <div class="pane-bar-top">
+                <span><i class="fa-solid fa-eye"></i> المعاينة الحية (Markdown)</span>
+                <span id="lbl-json-eval" style="color: var(--emerald); font-size: 0.7rem;">جاهز</span>
+              </div>
+              <div class="md-render-view" id="md-preview-pane"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="app-status-footer">
+      <div class="footer-stat-unit">
+        <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); display: inline-block;"></span>
+        <span id="lbl-footer-text">Media Studio Pro · جاهز وفوري بالمتصفح</span>
+      </div>
+
+      <div class="footer-stat-unit hide-mobile">
+        <i class="fa-solid fa-shield-halved" style="color: var(--emerald);"></i>
+        <span>خصوصية 100% · لا يتم إرسال أي وسائط لخوادم خارجية</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <div class="modal-veil" id="modal-github" onclick="closeGitHubModal(event)">
+    <div class="modal-box-card" onclick="event.stopPropagation()">
+      <div class="modal-bar-head">
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <i class="fa-brands fa-github" style="font-size: 1.35rem; color: #fff;"></i>
+          <h3 style="font-size: 1.05rem; font-weight: 700; color: #fff;">نشر الموقع مجاناً على GitHub Pages</h3>
+        </div>
+        <button class="micro-btn" onclick="closeGitHubModal()">&times;</button>
+      </div>
+
+      <div class="modal-scroll-area">
+        <p style="margin-bottom: 1rem;">
+          الموقع مبرمج بالكامل كملف مستقل <code style="color: var(--cyan); background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 4px;">index.html</code> بدون الحاجة لأي خادم. يمكنك رفعه على GitHub Pages في 3 خطوات بسيطة:
+        </p>
+
+        <div class="step-item-card">
+          <div class="step-num-circle">1</div>
+          <div>
+            <strong>تحميل ملف index.html</strong>
+            <p style="font-size: 0.775rem; margin-top: 0.2rem;">اضغط على زر "تحميل ملف index.html" بالأسفل لحفظه مباشرة على جهازك.</p>
+          </div>
+        </div>
+
+        <div class="step-item-card">
+          <div class="step-num-circle">2</div>
+          <div>
+            <strong>إنشاء مستودع على GitHub</strong>
+            <p style="font-size: 0.775rem; margin-top: 0.2rem;">ادخل إلى <a href="https://github.com/new" target="_blank" style="color: var(--cyan); text-decoration: underline;">github.com/new</a> وأنشئ مستودعاً عاماً جديداً، ثم ارفع ملف <code style="color: var(--cyan);">index.html</code> إليه.</p>
+          </div>
+        </div>
+
+        <div class="step-item-card">
+          <div class="step-num-circle">3</div>
+          <div>
+            <strong>تفعيل GitHub Pages</strong>
+            <p style="font-size: 0.775rem; margin-top: 0.2rem;">من المستودع، اذهب إلى <strong>Settings</strong> ➔ <strong>Pages</strong> واختر النشر من فرع <strong>main</strong> ثم Save. سيصبح موقعك متاحاً برابط مجاني فوري!</p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 0.65rem; margin-top: 1rem; flex-wrap: wrap;">
+          <button class="primary-save-btn" style="flex: 1; justify-content: center;" onclick="downloadSingleFileHtml()">
+            <i class="fa-solid fa-download"></i> تحميل ملف index.html للرفع
+          </button>
+          <button class="btn-action-tool" style="flex: 1; justify-content: center;" onclick="copyFullCode()">
+            <i class="fa-solid fa-copy"></i> نسخ كود الصفحة بالكامل
+          </button>
+        </div>
+
+        <textarea id="raw-code-box" style="width: 100%; height: 160px; background: rgba(0,0,0,0.6); border: 1px solid var(--border-line); border-radius: var(--radius-sm); color: var(--cyan); font-family: var(--font-mono); font-size: 0.75rem; padding: 0.75rem; margin-top: 0.85rem; resize: vertical; direction: ltr; text-align: left;" readonly></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-veil" id="modal-snapshot" onclick="closeSnapshotModal(event)">
+    <div class="modal-box-card" style="max-width: 580px;" onclick="event.stopPropagation()">
+      <div class="modal-bar-head">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #fff;"><i class="fa-solid fa-camera" style="color: var(--cyan);"></i> لقطة الفيديو الملتقطة</h3>
+        <button class="micro-btn" onclick="closeSnapshotModal()">&times;</button>
+      </div>
+      <div class="modal-scroll-area" style="text-align: center;">
+        <img id="snapshot-preview-img" style="max-width: 100%; max-height: 48vh; border-radius: var(--radius-sm); border: 1px solid var(--border-line); margin-bottom: 1rem;" alt="Frame" />
+        <div style="display: flex; gap: 0.65rem; justify-content: center;">
+          <button class="primary-save-btn" onclick="downloadSnapshotImage()"><i class="fa-solid fa-download"></i> حفظ الصورة</button>
+          <button class="btn-action-tool" onclick="transferSnapshotToImageEditor()"><i class="fa-solid fa-wand-magic-sparkles"></i> نقل لاستوديو الصور</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-tray" id="toast-tray"></div>
+
+  <script>
+    const appState = {
+      lang: 'ar',
+      currentModule: 'image',
+      activeCategory: 'color',
+      image: {
+        raw: null,
+        canvas: document.getElementById('image-canvas'),
+        ctx: document.getElementById('image-canvas').getContext('2d'),
+        zoom: 1,
+        rotation: 0,
+        flipH: false,
+        flipV: false,
+        aspectLock: true,
+        cropper: null,
+        snapshotUrl: null
+      },
+      video: {
+        el: document.getElementById('main-video'),
+        trimStart: 0,
+        trimEnd: 0,
+        duration: 0,
+        audioCtx: null,
+        gainNode: null,
+        sourceNode: null
+      }
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadHighResSample();
+      loadSampleMd();
+      refreshCodePreview();
+    });
+
+    function showToast(msg, icon = 'fa-circle-check') {
+      const tray = document.getElementById('toast-tray');
+      const toast = document.createElement('div');
+      toast.className = 'toast-bubble';
+      toast.innerHTML = `<i class="fa-solid ${icon}" style="color: var(--cyan);"></i> <span>${msg}</span>`;
+      tray.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.2s ease';
+        setTimeout(() => toast.remove(), 200);
+      }, 2600);
+    }
+
+    function toggleAppLanguage() {
+      appState.lang = appState.lang === 'ar' ? 'en' : 'ar';
+      const isAr = appState.lang === 'ar';
+      document.documentElement.lang = appState.lang;
+      document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+      document.getElementById('btn-lang-switch').querySelector('span').innerText = isAr ? 'EN' : 'عربي';
+
+      document.getElementById('lbl-brand-desc').innerText = isAr ? 'استوديو الوسائط الشامل' : 'All-in-One Client Studio';
+      document.getElementById('lbl-tab-img').innerText = isAr ? 'استوديو الصور' : 'Image Studio';
+      document.getElementById('lbl-tab-vid').innerText = isAr ? 'مختبر الفيديو والصوت' : 'Video & Audio Lab';
+      document.getElementById('lbl-tab-txt').innerText = isAr ? 'الأكواد والنصوص' : 'Text & Code Suite';
+      document.getElementById('lbl-btn-export-top').innerText = isAr ? 'حفظ' : 'Export';
+      document.getElementById('lbl-chip-color').innerText = isAr ? 'الألوان' : 'Color';
+      document.getElementById('lbl-chip-presets').innerText = isAr ? 'فلاتر' : 'Presets';
+      document.getElementById('lbl-chip-crop').innerText = isAr ? 'القص والتدوير' : 'Crop & Rotate';
+      document.getElementById('lbl-chip-resize').innerText = isAr ? 'الأبعاد' : 'Dimensions';
+      document.getElementById('lbl-chip-wm').innerText = isAr ? 'النصوص' : 'Watermark';
+      document.getElementById('lbl-chip-exp').innerText = isAr ? 'تصدير' : 'Export Opts';
+
+      showToast(isAr ? 'تم تحويل اللغة إلى العربية' : 'Switched to English');
+    }
+
+    function changeActiveModule(mod) {
+      appState.currentModule = mod;
+      document.querySelectorAll('.module-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.module-view').forEach(v => v.classList.remove('active'));
+
+      if (mod === 'image') {
+        document.getElementById('tab-image').classList.add('active');
+        document.getElementById('view-image').classList.add('active');
+      } else if (mod === 'video') {
+        document.getElementById('tab-video').classList.add('active');
+        document.getElementById('view-video').classList.add('active');
+      } else if (mod === 'text') {
+        document.getElementById('tab-text').classList.add('active');
+        document.getElementById('view-text').classList.add('active');
+      }
+    }
+
+    function onQuickExportTrigger() {
+      if (appState.currentModule === 'image') exportImageFile();
+      else if (appState.currentModule === 'video') captureFrameSnapshot();
+      else if (appState.currentModule === 'text') saveTextFile();
+    }
+
+    function setToolCategory(cat) {
+      appState.activeCategory = cat;
+      document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
+      document.getElementById(`chip-${cat}`).classList.add('active');
+
+      const cats = ['color', 'presets', 'crop', 'resize', 'watermark', 'export'];
+      cats.forEach(c => {
+        const el = document.getElementById(`tool-subview-${c}`);
+        if (el) el.style.display = (c === cat) ? 'block' : 'none';
+      });
+    }
+
+    function onUserImageUploaded(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const img = new Image();
+        img.onload = () => {
+          appState.image.raw = img;
+          appState.image.rotation = 0;
+          appState.image.flipH = false;
+          appState.image.flipV = false;
+          document.getElementById('drop-zone-overlay').style.display = 'none';
+          document.getElementById('inp-w').value = img.naturalWidth;
+          document.getElementById('inp-h').value = img.naturalHeight;
+          resetImageAllFilters();
+          redrawCanvasWithFilters();
+          showToast(`تم تحميل الصورة: ${img.naturalWidth}×${img.naturalHeight}px`);
+        };
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function loadHighResSample() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1200;
+      canvas.height = 800;
+      const ctx = canvas.getContext('2d');
+
+      const bgGrad = ctx.createLinearGradient(0, 0, 1200, 800);
+      bgGrad.addColorStop(0, '#0a0f1d');
+      bgGrad.addColorStop(0.5, '#1e1b4b');
+      bgGrad.addColorStop(1, '#0284c7');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, 1200, 800);
+
+      const rad = ctx.createRadialGradient(600, 400, 30, 600, 400, 380);
+      rad.addColorStop(0, 'rgba(56, 189, 248, 0.9)');
+      rad.addColorStop(0.5, 'rgba(99, 102, 241, 0.45)');
+      rad.addColorStop(1, 'transparent');
+      ctx.fillStyle = rad;
+      ctx.beginPath();
+      ctx.arc(600, 400, 380, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < 1200; x += 60) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 800); ctx.stroke(); }
+      for (let y = 0; y < 800; y += 60) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1200, y); ctx.stroke(); }
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 54px Cairo, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.shadowColor = 'rgba(56, 189, 248, 0.8)';
+      ctx.shadowBlur = 24;
+      ctx.fillText('MEDIA STUDIO PRO', 600, 390);
+
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = '600 24px Cairo, sans-serif';
+      ctx.fillText('استوديو الوسائط الشامل فائق السرعة', 600, 445);
+
+      const img = new Image();
+      img.onload = () => {
+        appState.image.raw = img;
+        document.getElementById('drop-zone-overlay').style.display = 'none';
+        document.getElementById('inp-w').value = img.naturalWidth;
+        document.getElementById('inp-h').value = img.naturalHeight;
+        redrawCanvasWithFilters();
+        showToast('تم إعداد الصورة التجريبية الفائقة');
+      };
+      img.src = canvas.toDataURL('image/png');
+    }
+
+    function redrawCanvasWithFilters() {
+      if (!appState.image.raw) return;
+
+      const raw = appState.image.raw;
+      const canvas = appState.image.canvas;
+      const ctx = appState.image.ctx;
+
+      const targetW = parseInt(document.getElementById('inp-w').value) || raw.naturalWidth;
+      const targetH = parseInt(document.getElementById('inp-h').value) || raw.naturalHeight;
+
+      const isRotated90 = Math.abs(appState.image.rotation % 180) === 90;
+      canvas.width = isRotated90 ? targetH : targetW;
+      canvas.height = isRotated90 ? targetW : targetH;
+
+      ctx.save();
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.rotate((appState.image.rotation * Math.PI) / 180);
+      ctx.scale(appState.image.flipH ? -1 : 1, appState.image.flipV ? -1 : 1);
+
+      const b = document.getElementById('sl-b').value;
+      const c = document.getElementById('sl-c').value;
+      const s = document.getElementById('sl-s').value;
+      const h = document.getElementById('sl-h').value;
+      const bl = document.getElementById('sl-bl').value;
+      const sep = document.getElementById('sl-sep').value;
+      const gr = document.getElementById('sl-gr').value;
+      const inv = document.getElementById('sl-inv').value;
+
+      document.getElementById('num-b').innerText = `${b}%`;
+      document.getElementById('num-c').innerText = `${c}%`;
+      document.getElementById('num-s').innerText = `${s}%`;
+      document.getElementById('num-h').innerText = `${h}°`;
+      document.getElementById('num-bl').innerText = `${bl}px`;
+      document.getElementById('num-sep').innerText = `${sep}%`;
+      document.getElementById('num-gr').innerText = `${gr}%`;
+      document.getElementById('num-inv').innerText = `${inv}%`;
+
+      ctx.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%) hue-rotate(${h}deg) blur(${bl}px) sepia(${sep}%) grayscale(${gr}%) invert(${inv}%)`;
+
+      ctx.drawImage(raw, -targetW / 2, -targetH / 2, targetW, targetH);
+      ctx.restore();
+
+      renderWatermarkLayer(canvas, ctx);
+
+      const dim = `${canvas.width} × ${canvas.height} px`;
+      document.getElementById('lbl-canvas-dimensions').innerText = dim;
+      document.getElementById('lbl-footer-text').innerText = `صورة · ${dim} · معالجة فورية`;
+    }
+
+    function renderWatermarkLayer(canvas, ctx) {
+      const enabled = document.getElementById('chk-wm').checked;
+      const text = document.getElementById('inp-wm').value.trim();
+      if (!enabled || !text) return;
+
+      const font = document.getElementById('sel-font').value;
+      const size = parseInt(document.getElementById('sl-wm-s').value) || 36;
+      const color = document.getElementById('inp-wm-c').value;
+      const opacity = parseInt(document.getElementById('sl-wm-op').value) / 100;
+      const align = document.getElementById('sel-wm-align').value;
+
+      document.getElementById('num-wm-s').innerText = `${size}px`;
+      document.getElementById('num-wm-op').innerText = `${Math.round(opacity * 100)}%`;
+
+      ctx.save();
+      ctx.font = `700 ${size}px ${font}`;
+      ctx.fillStyle = color;
+      ctx.globalAlpha = opacity;
+      ctx.shadowColor = 'rgba(0,0,0,0.8)';
+      ctx.shadowBlur = 8;
+
+      const pad = 28;
+      const tw = ctx.measureText(text).width;
+      let x = pad;
+      let y = canvas.height - pad;
+
+      if (align === 'bottom-right') { x = canvas.width - tw - pad; y = canvas.height - pad; }
+      else if (align === 'bottom-left') { x = pad; y = canvas.height - pad; }
+      else if (align === 'top-right') { x = canvas.width - tw - pad; y = pad + size; }
+      else if (align === 'top-left') { x = pad; y = pad + size; }
+      else if (align === 'center') { x = (canvas.width - tw) / 2; y = (canvas.height + size / 2) / 2; }
+
+      ctx.fillText(text, x, y);
+      ctx.restore();
+    }
+
+    function spinImage(deg) {
+      appState.image.rotation = (appState.image.rotation + deg) % 360;
+      redrawCanvasWithFilters();
+    }
+
+    function mirrorImage(axis) {
+      if (axis === 'h') appState.image.flipH = !appState.image.flipH;
+      if (axis === 'v') appState.image.flipV = !appState.image.flipV;
+      redrawCanvasWithFilters();
+    }
+
+    function triggerFilterPreset(type, el) {
+      document.querySelectorAll('.preset-chip').forEach(b => b.classList.remove('active'));
+      if (el) el.classList.add('active');
+
+      document.getElementById('sl-b').value = 100;
+      document.getElementById('sl-c').value = 100;
+      document.getElementById('sl-s').value = 100;
+      document.getElementById('sl-h').value = 0;
+      document.getElementById('sl-bl').value = 0;
+      document.getElementById('sl-sep').value = 0;
+      document.getElementById('sl-gr').value = 0;
+      document.getElementById('sl-inv').value = 0;
+
+      if (type === 'vintage') {
+        document.getElementById('sl-b').value = 110;
+        document.getElementById('sl-c').value = 90;
+        document.getElementById('sl-sep').value = 55;
+        document.getElementById('sl-s').value = 85;
+      } else if (type === 'cyberpunk') {
+        document.getElementById('sl-b').value = 105;
+        document.getElementById('sl-c').value = 140;
+        document.getElementById('sl-s').value = 160;
+        document.getElementById('sl-h').value = 310;
+      } else if (type === 'filmnoir') {
+        document.getElementById('sl-c').value = 160;
+        document.getElementById('sl-gr').value = 100;
+        document.getElementById('sl-b').value = 95;
+      } else if (type === 'glacier') {
+        document.getElementById('sl-b').value = 105;
+        document.getElementById('sl-c').value = 115;
+        document.getElementById('sl-h').value = 195;
+        document.getElementById('sl-s').value = 110;
+      } else if (type === 'warmgold') {
+        document.getElementById('sl-b').value = 105;
+        document.getElementById('sl-sep').value = 35;
+        document.getElementById('sl-s').value = 135;
+        document.getElementById('sl-h').value = 35;
+      }
+
+      redrawCanvasWithFilters();
+      showToast(`تم تطبيق فلتر: ${type}`);
+    }
+
+    function resetImageAllFilters() {
+      document.getElementById('sl-b').value = 100;
+      document.getElementById('sl-c').value = 100;
+      document.getElementById('sl-s').value = 100;
+      document.getElementById('sl-h').value = 0;
+      document.getElementById('sl-bl').value = 0;
+      document.getElementById('sl-sep').value = 0;
+      document.getElementById('sl-gr').value = 0;
+      document.getElementById('sl-inv').value = 0;
+      appState.image.rotation = 0;
+      appState.image.flipH = false;
+      appState.image.flipV = false;
+      document.querySelectorAll('.preset-chip').forEach(b => b.classList.remove('active'));
+      const first = document.querySelector('.preset-chip');
+      if (first) first.classList.add('active');
+      redrawCanvasWithFilters();
+      showToast('تمت إعادة ضبط التعديلات');
+    }
+
+    function launchCropperTool(aspect) {
+      if (!appState.image.raw) return;
+      const c = document.getElementById('cropper-container');
+      const target = document.getElementById('cropper-target');
+      target.src = appState.image.canvas.toDataURL();
+      c.classList.add('active');
+
+      if (appState.image.cropper) appState.image.cropper.destroy();
+      appState.image.cropper = new Cropper(target, {
+        aspectRatio: isNaN(aspect) ? NaN : aspect,
+        viewMode: 1,
+        autoCropArea: 0.85
+      });
+      showToast('اضبط إطار القص ثم اضغط "تطبيق القص"');
+    }
+
+    function saveCropperResult() {
+      if (!appState.image.cropper) return;
+      const cropC = appState.image.cropper.getCroppedCanvas();
+      if (!cropC) return;
+      const img = new Image();
+      img.onload = () => {
+        appState.image.raw = img;
+        document.getElementById('inp-w').value = img.naturalWidth;
+        document.getElementById('inp-h').value = img.naturalHeight;
+        cancelCropperModal();
+        redrawCanvasWithFilters();
+        showToast(`تم القص: ${img.naturalWidth}×${img.naturalHeight}px`);
+      };
+      img.src = cropC.toDataURL();
+    }
+
+    function cancelCropperModal() {
+      document.getElementById('cropper-container').classList.remove('active');
+      if (appState.image.cropper) {
+        appState.image.cropper.destroy();
+        appState.image.cropper = null;
+      }
+    }
+
+    function toggleAspect() {
+      appState.image.aspectLock = !appState.image.aspectLock;
+      const btn = document.getElementById('btn-lock');
+      const icon = document.getElementById('icon-lock');
+      if (appState.image.aspectLock) {
+        btn.classList.add('active');
+        icon.className = 'fa-solid fa-link';
+        showToast('تم قفل النسبة');
+      } else {
+        btn.classList.remove('active');
+        icon.className = 'fa-solid fa-link-slash';
+        showToast('تم إلغاء قفل النسبة');
+      }
+    }
+
+    function onTypeW() {
+      if (!appState.image.aspectLock || !appState.image.raw) return;
+      const w = parseInt(document.getElementById('inp-w').value);
+      if (w > 0) {
+        const ratio = appState.image.raw.naturalHeight / appState.image.raw.naturalWidth;
+        document.getElementById('inp-h').value = Math.round(w * ratio);
+      }
+    }
+
+    function onTypeH() {
+      if (!appState.image.aspectLock || !appState.image.raw) return;
+      const h = parseInt(document.getElementById('inp-h').value);
+      if (h > 0) {
+        const ratio = appState.image.raw.naturalWidth / appState.image.raw.naturalHeight;
+        document.getElementById('inp-w').value = Math.round(h * ratio);
+      }
+    }
+
+    function applyCustomDimensions() {
+      redrawCanvasWithFilters();
+      showToast('تم تطبيق الأبعاد بنجاح');
+    }
+
+    function scaleZoom(factor) {
+      appState.image.zoom *= factor;
+      appState.image.zoom = Math.min(Math.max(appState.image.zoom, 0.2), 5);
+      appState.image.canvas.style.transform = `scale(${appState.image.zoom})`;
+      document.getElementById('lbl-zoom-val').innerText = `${Math.round(appState.image.zoom * 100)}%`;
+    }
+
+    function fitZoomStage() {
+      appState.image.zoom = 1;
+      appState.image.canvas.style.transform = `scale(1)`;
+      document.getElementById('lbl-zoom-val').innerText = `100%`;
+    }
+
+    function exportImageFile() {
+      if (!appState.image.raw) {
+        showToast('يرجى تحميل صورة أولاً', 'fa-triangle-exclamation');
+        return;
+      }
+      const fmt = document.getElementById('sel-fmt').value;
+      const q = parseInt(document.getElementById('sl-qual').value) / 100;
+      const ext = fmt.split('/')[1] || 'png';
+      const name = `media-studio-${Date.now()}.${ext}`;
+
+      appState.image.canvas.toBlob((blob) => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = name;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast(`تم تنزيل الصورة: ${name}`);
+      }, fmt, q);
+    }
+
+    async function copyImageToClip() {
+      if (!appState.image.raw) return;
+      try {
+        appState.image.canvas.toBlob(async (blob) => {
+          if (!blob) return;
+          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+          showToast('تم نسخ الصورة للحافظة');
+        }, 'image/png');
+      } catch (err) {
+        showToast('المتصفح يمنع النسخ المباشر للحافظة', 'fa-triangle-exclamation');
+      }
+    }
+
+    function onUserVideoUploaded(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      loadVideoSource(url, file.name);
+    }
+
+    function loadVideoSource(url, label) {
+      const v = appState.video.el;
+      v.src = url;
+      document.getElementById('video-empty-notice').style.display = 'none';
+      setupWebAudioGain();
+      showToast(`تم تحميل: ${label || 'فيديو'}`);
+    }
+
+    function loadSampleVideoDemo() {
+      showToast('جاري توليد مقطع فيديو تجريبي...', 'fa-film');
+      const c = document.createElement('canvas');
+      c.width = 640;
+      c.height = 360;
+      const ctx = c.getContext('2d');
+
+      const stream = c.captureStream(30);
+      let rec;
+      try { rec = new MediaRecorder(stream, { mimeType: 'video/webm' }); }
+      catch (e) { rec = new MediaRecorder(stream); }
+
+      const chunks = [];
+      rec.ondataavailable = ev => chunks.push(ev.data);
+      rec.onstop = () => {
+        const blob = new Blob(chunks, { type: 'video/webm' });
+        loadVideoSource(URL.createObjectURL(blob), 'فيديو تجريبي تفاعلي');
+      };
+
+      rec.start();
+      let f = 0;
+      function step() {
+        ctx.fillStyle = '#06090f';
+        ctx.fillRect(0, 0, 640, 360);
+        ctx.strokeStyle = `hsl(${(f * 3) % 360}, 85%, 60%)`;
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        for (let x = 0; x < 640; x += 10) {
+          const y = 180 + Math.sin((x + f * 6) * 0.03) * 60;
+          if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 26px Cairo, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('MEDIA STUDIO PRO - VIDEO LAB', 320, 160);
+
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = '16px monospace';
+        ctx.fillText(`إطار ${f} / 150 · ${(f / 30).toFixed(1)}s`, 320, 230);
+
+        f++;
+        if (f < 150) requestAnimationFrame(step);
+        else rec.stop();
+      }
+      step();
+    }
+
+    function onVideoMetaReady() {
+      const v = appState.video.el;
+      appState.video.duration = v.duration;
+      appState.video.trimStart = 0;
+      appState.video.trimEnd = v.duration;
+
+      document.getElementById('sl-vid-s').max = v.duration;
+      document.getElementById('sl-vid-s').value = 0;
+      document.getElementById('sl-vid-e').max = v.duration;
+      document.getElementById('sl-vid-e').value = v.duration;
+
+      updateTrimReadouts();
+      updateScrubTrimBox();
+    }
+
+    function formatTimeSec(sec) {
+      if (isNaN(sec) || sec < 0) return '00:00';
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      const ms = Math.floor((sec % 1) * 10);
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}.${ms}`;
+    }
+
+    function onVideoPlayTick() {
+      const v = appState.video.el;
+      const cur = v.currentTime;
+      const dur = v.duration || 0;
+      document.getElementById('lbl-vid-time').innerText = `${formatTimeSec(cur)} / ${formatTimeSec(dur)}`;
+
+      const pct = dur > 0 ? (cur / dur) * 100 : 0;
+      document.getElementById('ui-play-head').style.width = `${pct}%`;
+
+      if (appState.video.trimEnd > 0 && cur >= appState.video.trimEnd) {
+        v.currentTime = appState.video.trimStart;
+      }
+    }
+
+    function toggleVideoPlay() {
+      const v = appState.video.el;
+      const icon = document.getElementById('icon-play-toggle');
+      if (v.paused) {
+        if (v.currentTime < appState.video.trimStart || v.currentTime >= appState.video.trimEnd) {
+          v.currentTime = appState.video.trimStart;
+        }
+        v.play();
+        icon.className = 'fa-solid fa-pause';
+      } else {
+        v.pause();
+        icon.className = 'fa-solid fa-play';
+      }
+    }
+
+    function stepVideoOffset(s) {
+      const v = appState.video.el;
+      v.currentTime = Math.max(0, Math.min(v.duration, v.currentTime + s));
+    }
+
+    function onTimelineClick(e) {
+      const bar = document.getElementById('video-scrub-track');
+      const rect = bar.getBoundingClientRect();
+      const pct = (e.clientX - rect.left) / rect.width;
+      const v = appState.video.el;
+      if (v.duration) v.currentTime = Math.max(0, Math.min(v.duration, pct * v.duration));
+    }
+
+    function onTrimStartSl(val) {
+      const s = parseFloat(val);
+      if (s >= appState.video.trimEnd) {
+        appState.video.trimStart = Math.max(0, appState.video.trimEnd - 0.5);
+        document.getElementById('sl-vid-s').value = appState.video.trimStart;
+      } else {
+        appState.video.trimStart = s;
+      }
+      updateTrimReadouts();
+      updateScrubTrimBox();
+      appState.video.el.currentTime = appState.video.trimStart;
+    }
+
+    function onTrimEndSl(val) {
+      const end = parseFloat(val);
+      if (end <= appState.video.trimStart) {
+        appState.video.trimEnd = Math.min(appState.video.duration, appState.video.trimStart + 0.5);
+        document.getElementById('sl-vid-e').value = appState.video.trimEnd;
+      } else {
+        appState.video.trimEnd = end;
+      }
+      updateTrimReadouts();
+      updateScrubTrimBox();
+      appState.video.el.currentTime = appState.video.trimEnd;
+    }
+
+    function setTrimStartCurrent() {
+      const cur = appState.video.el.currentTime;
+      document.getElementById('sl-vid-s').value = cur;
+      onTrimStartSl(cur);
+      showToast(`بداية القص: ${formatTimeSec(cur)}`);
+    }
+
+    function setTrimEndCurrent() {
+      const cur = appState.video.el.currentTime;
+      document.getElementById('sl-vid-e').value = cur;
+      onTrimEndSl(cur);
+      showToast(`نهاية القص: ${formatTimeSec(cur)}`);
+    }
+
+    function updateTrimReadouts() {
+      document.getElementById('num-trim-s').innerText = formatTimeSec(appState.video.trimStart);
+      document.getElementById('num-trim-e').innerText = formatTimeSec(appState.video.trimEnd);
+    }
+
+    function updateScrubTrimBox() {
+      const dur = appState.video.duration || 1;
+      const sPct = (appState.video.trimStart / dur) * 100;
+      const wPct = ((appState.video.trimEnd - appState.video.trimStart) / dur) * 100;
+      const el = document.getElementById('ui-trim-box');
+      el.style.insetInlineStart = `${sPct}%`;
+      el.style.width = `${wPct}%`;
+    }
+
+    function applyVideoFiltersRealtime() {
+      const b = document.getElementById('sl-vf-b').value;
+      const c = document.getElementById('sl-vf-c').value;
+      const s = document.getElementById('sl-vf-s').value;
+
+      document.getElementById('num-vf-b').innerText = `${b}%`;
+      document.getElementById('num-vf-c').innerText = `${c}%`;
+      document.getElementById('num-vf-s').innerText = `${s}%`;
+
+      appState.video.el.style.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
+    }
+
+    function setupWebAudioGain() {
+      try {
+        if (!appState.video.audioCtx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          appState.video.audioCtx = new AC();
+          appState.video.sourceNode = appState.video.audioCtx.createMediaElementSource(appState.video.el);
+          appState.video.gainNode = appState.video.audioCtx.createGain();
+          appState.video.sourceNode.connect(appState.video.gainNode);
+          appState.video.gainNode.connect(appState.video.audioCtx.destination);
+        }
+      } catch (err) {}
+    }
+
+    function setGainBooster(val) {
+      document.getElementById('num-vol').innerText = `${val}%`;
+      const gain = parseFloat(val) / 100;
+      if (appState.video.gainNode) appState.video.gainNode.gain.value = gain;
+      else appState.video.el.volume = Math.min(1, gain);
+    }
+
+    function toggleAudioMute() {
+      const v = appState.video.el;
+      v.muted = !v.muted;
+      document.getElementById('icon-mute').className = v.muted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+      showToast(v.muted ? 'تم كتم الصوت' : 'تم تشغيل الصوت');
+    }
+
+    function setSpeed(rate, btn) {
+      appState.video.el.playbackRate = rate;
+      document.querySelectorAll('#view-video .btn-action-tool').forEach(b => {
+        if (b.innerText.includes('x')) b.classList.remove('active');
+      });
+      if (btn) btn.classList.add('active');
+      showToast(`السرعة: ${rate}x`);
+    }
+
+    function captureFrameSnapshot() {
+      const v = appState.video.el;
+      if (!v || !v.videoWidth) {
+        showToast('يرجى تحميل فيديو أولاً للالتقاط', 'fa-triangle-exclamation');
+        return;
+      }
+
+      const c = document.createElement('canvas');
+      c.width = v.videoWidth;
+      c.height = v.videoHeight;
+      const ctx = c.getContext('2d');
+
+      const b = document.getElementById('sl-vf-b').value;
+      const co = document.getElementById('sl-vf-c').value;
+      const s = document.getElementById('sl-vf-s').value;
+      ctx.filter = `brightness(${b}%) contrast(${co}%) saturate(${s}%)`;
+
+      ctx.drawImage(v, 0, 0, c.width, c.height);
+      const url = c.toDataURL('image/png');
+      appState.image.snapshotUrl = url;
+
+      document.getElementById('snapshot-preview-img').src = url;
+      document.getElementById('modal-snapshot').classList.add('active');
+    }
+
+    function closeSnapshotModal(e) {
+      if (e && e.target !== e.currentTarget && !e.target.classList.contains('micro-btn')) return;
+      document.getElementById('modal-snapshot').classList.remove('active');
+    }
+
+    function downloadSnapshotImage() {
+      if (!appState.image.snapshotUrl) return;
+      const a = document.createElement('a');
+      a.href = appState.image.snapshotUrl;
+      a.download = `snapshot-${Date.now()}.png`;
+      a.click();
+      showToast('تم حفظ لقطة الفيديو بنجاح');
+      closeSnapshotModal();
+    }
+
+    function transferSnapshotToImageEditor() {
+      if (!appState.image.snapshotUrl) return;
+      const img = new Image();
+      img.onload = () => {
+        appState.image.raw = img;
+        document.getElementById('drop-zone-overlay').style.display = 'none';
+        document.getElementById('inp-w').value = img.naturalWidth;
+        document.getElementById('inp-h').value = img.naturalHeight;
+        resetImageAllFilters();
+        redrawCanvasWithFilters();
+        changeActiveModule('image');
+        closeSnapshotModal();
+        showToast('تم نقل اللقطة إلى استوديو الصور!');
+      };
+      img.src = appState.image.snapshotUrl;
+    }
+
+    async function renderAndDownloadTrimmedClip() {
+      const v = appState.video.el;
+      if (!v || !v.duration) return;
+
+      v.pause();
+      v.currentTime = appState.video.trimStart;
+
+      const c = document.createElement('canvas');
+      c.width = v.videoWidth || 640;
+      c.height = v.videoHeight || 360;
+      const ctx = c.getContext('2d');
+
+      const stream = c.captureStream(30);
+      let rec;
+      try { rec = new MediaRecorder(stream, { mimeType: 'video/webm' }); }
+      catch (e) { rec = new MediaRecorder(stream); }
+
+      const chunks = [];
+      rec.ondataavailable = ev => chunks.push(ev.data);
+      rec.onstop = () => {
+        v.pause();
+        const blob = new Blob(chunks, { type: 'video/webm' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `clip-${Date.now()}.webm`;
+        a.click();
+        showToast('تم تصدير مقطع الفيديو المقصوص!');
+      };
+
+      rec.start();
+      v.play();
+      showToast('جاري تسجيل وتصدير المقطع...');
+
+      function trackFrame() {
+        if (v.currentTime >= appState.video.trimEnd || v.paused) {
+          rec.stop();
+          return;
+        }
+        ctx.drawImage(v, 0, 0, c.width, c.height);
+        requestAnimationFrame(trackFrame);
+      }
+      trackFrame();
+    }
+
+    function loadSampleMd() {
+      const sample = `# مرحباً بك في Media Studio Pro
+
+استوديو متكامل للوسائط يعمل 100% داخل المتصفح.
+
+## المميزات:
+- **معالجة الصور**: فلاتر، قص، أبعاد، علامات مائية.
+- **مختبر الفيديو**: قص بدقة، لقطات HD، مضخم صوت 300%.
+- **جناح الأكواد**: تنسيق JSON ومعاينة Markdown فورية.
+
+\`\`\`javascript
+// كود تجريبي
+const app = {
+  name: "Media Studio Pro",
+  ready: true
+};
+console.log("Ready for GitHub Pages!");
+\`\`\`
+`;
+      document.getElementById('raw-text-area').value = sample;
+      onTextEditorType();
+    }
+
+    function onTextEditorType() {
+      const text = document.getElementById('raw-text-area').value;
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      const chars = text.length;
+
+      document.getElementById('lbl-text-stats').innerText = `${words} كلمة · ${chars} حرف`;
+
+      const out = document.getElementById('md-preview-pane');
+      if (window.marked) out.innerHTML = marked.parse(text);
+      else out.innerText = text;
+    }
+
+    function transformCase(mode) {
+      const el = document.getElementById('raw-text-area');
+      let val = el.value;
+      if (mode === 'upper') val = val.toUpperCase();
+      else if (mode === 'lower') val = val.toLowerCase();
+      else if (mode === 'title') val = val.replace(/\w\S*/g, t => t.charAt(0).toUpperCase() + t.substr(1).toLowerCase());
+      else if (mode === 'camel') {
+        val = val.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => +match === 0 ? "" : index === 0 ? match.toLowerCase() : match.toUpperCase());
+      } else if (mode === 'snake') {
+        val = val.trim().toLowerCase().replace(/\s+/g, '_');
+      }
+      el.value = val;
+      onTextEditorType();
+      showToast(`تم التحويل: ${mode}`);
+    }
+
+    function formatJsonEditor() {
+      const el = document.getElementById('raw-text-area');
+      try {
+        const obj = JSON.parse(el.value);
+        el.value = JSON.stringify(obj, null, 2);
+        onTextEditorType();
+        document.getElementById('lbl-json-eval').innerText = 'JSON صالح ومثالي';
+        document.getElementById('lbl-json-eval').style.color = 'var(--emerald)';
+        showToast('تم تنسيق كود JSON وترتيبه');
+      } catch (e) {
+        document.getElementById('lbl-json-eval').innerText = 'خطأ في بنية JSON: ' + e.message;
+        document.getElementById('lbl-json-eval').style.color = 'var(--rose)';
+        showToast('خطأ في بناء كود JSON', 'fa-triangle-exclamation');
+      }
+    }
+
+    function minifyJsonEditor() {
+      const el = document.getElementById('raw-text-area');
+      try {
+        const obj = JSON.parse(el.value);
+        el.value = JSON.stringify(obj);
+        onTextEditorType();
+        showToast('تم ضغط كود JSON');
+      } catch (e) {
+        showToast('كود JSON غير صالح للضغط', 'fa-triangle-exclamation');
+      }
+    }
+
+    function convertBase64(encode) {
+      const el = document.getElementById('raw-text-area');
+      try {
+        if (encode) {
+          el.value = btoa(unescape(encodeURIComponent(el.value)));
+          showToast('تم التشفير إلى Base64');
+        } else {
+          el.value = decodeURIComponent(escape(atob(el.value)));
+          showToast('تم فك تشفير Base64');
+        }
+        onTextEditorType();
+      } catch (e) {
+        showToast('خطأ في معالجة Base64', 'fa-triangle-exclamation');
+      }
+    }
+
+    function trimSpaces() {
+      const el = document.getElementById('raw-text-area');
+      el.value = el.value.replace(/[ \t]+/g, ' ').replace(/^\s+|\s+$/gm, '');
+      onTextEditorType();
+      showToast('تم تنظيف المسافات الزائدة');
+    }
+
+    function copyEditorText() {
+      const val = document.getElementById('raw-text-area').value;
+      navigator.clipboard.writeText(val);
+      showToast('تم نسخ النص إلى الحافظة');
+    }
+
+    function saveTextFile() {
+      const val = document.getElementById('raw-text-area').value;
+      const blob = new Blob([val], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `document-${Date.now()}.txt`;
+      a.click();
+      showToast('تم تحميل وحفظ الملف النصي');
+    }
+
+    function openGitHubModal() {
+      refreshCodePreview();
+      document.getElementById('modal-github').classList.add('active');
+    }
+
+    function closeGitHubModal(e) {
+      if (e && e.target !== e.currentTarget && !e.target.classList.contains('micro-btn')) return;
+      document.getElementById('modal-github').classList.remove('active');
+    }
+
+    function refreshCodePreview() {
+      const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      const box = document.getElementById('raw-code-box');
+      if (box) box.value = fullHtml;
+    }
+
+    function downloadSingleFileHtml() {
+      const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'index.html';
+      a.click();
+      showToast('تم تنزيل ملف index.html جاهزاً للرفع على GitHub!');
+    }
+
+    function copyFullCode() {
+      const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      navigator.clipboard.writeText(fullHtml);
+      showToast('تم نسخ الكود المصدري الكامل للموقع!');
+    }
+  </script>
+</body>
+</html>
